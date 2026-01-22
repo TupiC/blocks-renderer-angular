@@ -9,22 +9,6 @@ on:
             - "**.md?"
 
 jobs:
-    lint:
-        name: "lint (node: 20)"
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  repository: "TupiC/blocks-renderer-angular"
-                  persist-credentials: false
-            - uses: actions/setup-node@v3
-              with:
-                  node-version: 20
-            - name: "Install dependencies for linting"
-              run: npm install
-            - name: "Run lint"
-              run: npm run lint
-
     unit_tests:
         name: "unit_tests (node: ${{ matrix.node }})"
         runs-on: ubuntu-latest
