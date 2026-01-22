@@ -1,0 +1,31 @@
+{
+    "name": "blocks-angular-renderer",
+    "version": "0.0.1",
+    "description": "Angular library for rendering Strapi blocks content with customizable components",
+    "keywords": [
+        "angular",
+        "strapi",
+        "blocks",
+        "renderer",
+        "content",
+        "cms"
+    ],
+    "author": "Christoph Tupi",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/TupiC/blocks-angular-renderer.git"
+    },
+    "homepage": "https://github.com/TupiC/blocks-angular-renderer#readme",
+    "bugs": {
+        "url": "https://github.com/TupiC/blocks-angular-renderer/issues"
+    },
+    "peerDependencies": {
+        "@angular/common": "^21.1.0",
+        "@angular/core": "^21.1.0"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0"
+    },
+    "sideEffects": false
+}

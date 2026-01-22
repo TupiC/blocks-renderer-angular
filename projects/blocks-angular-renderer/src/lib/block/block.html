@@ -1,0 +1,130 @@
+@if (!shouldRender) {
+    <!-- Block type not found, silently ignore -->
+} @else if (isEmptyParagraph) {
+    <br />
+} @else if (isVoidType) {
+    <!-- Void types don't render children -->
+    @switch (content.type) {
+        @case ('image') {
+            <img [src]="content.image.url" [alt]="content.image.alternativeText || ''" />
+        }
+    }
+} @else {
+    <!-- Render block with children -->
+    @switch (content.type) {
+        @case ('paragraph') {
+            <p>
+                @for (childNode of childrenNodes; track $index) {
+                    @if (childNode.type === 'text') {
+                        <lib-text
+                            [text]="childNode.text"
+                            [bold]="childNode.bold"
+                            [italic]="childNode.italic"
+                            [underline]="childNode.underline"
+                            [strikethrough]="childNode.strikethrough"
+                            [code]="childNode.code"
+                        />
+                    } @else {
+                        <lib-block [content]="childNode" />
+                    }
+                }
+            </p>
+        }
+        @case ('quote') {
+            <blockquote>
+                @for (childNode of childrenNodes; track $index) {
+                    @if (childNode.type === 'text') {
+                        <lib-text
+                            [text]="childNode.text"
+                            [bold]="childNode.bold"
+                            [italic]="childNode.italic"
+                            [underline]="childNode.underline"
+                            [strikethrough]="childNode.strikethrough"
+                            [code]="childNode.code"
+                        />
+                    } @else {
+                        <lib-block [content]="childNode" />
+                    }
+                }
+            </blockquote>
+        }
+        @case ('code') {
+            <pre>
+        <code>{{ plainText }}</code>
+      </pre>
+        }
+        @case ('heading') {
+            @switch (content.level) {
+                @case (1) {
+                    <h1>{{ plainText }}</h1>
+                }
+                @case (2) {
+                    <h2>{{ plainText }}</h2>
+                }
+                @case (3) {
+                    <h3>{{ plainText }}</h3>
+                }
+                @case (4) {
+                    <h4>{{ plainText }}</h4>
+                }
+                @case (5) {
+                    <h5>{{ plainText }}</h5>
+                }
+                @case (6) {
+                    <h6>{{ plainText }}</h6>
+                }
+            }
+        }
+        @case ('list') {
+            @if (content.format === 'ordered') {
+                <ol>
+                    @for (childNode of content.children; track $index) {
+                        <lib-block [content]="childNode" />
+                    }
+                </ol>
+            } @else {
+                <ul>
+                    @for (childNode of content.children; track $index) {
+                        <lib-block [content]="childNode" />
+                    }
+                </ul>
+            }
+        }
+        @case ('list-item') {
+            <li>
+                @for (childNode of childrenNodes; track $index) {
+                    @if (childNode.type === 'text') {
+                        <lib-text
+                            [text]="childNode.text"
+                            [bold]="childNode.bold"
+                            [italic]="childNode.italic"
+                            [underline]="childNode.underline"
+                            [strikethrough]="childNode.strikethrough"
+                            [code]="childNode.code"
+                        />
+                    } @else {
+                        <lib-block [content]="childNode" />
+                    }
+                }
+            </li>
+        }
+        @case ('link') {
+            <a [href]="content.url">
+                @for (childNode of childrenNodes; track $index) {
+                    @if (childNode.type === 'text') {
+                        <lib-text
+                            [text]="childNode.text"
+                            [bold]="childNode.bold"
+                            [italic]="childNode.italic"
+                            [underline]="childNode.underline"
+                            [strikethrough]="childNode.strikethrough"
+                            [code]="childNode.code"
+                        />
+                    } @else {
+                        <lib-block [content]="childNode" />
+                    }
+                }
+            </a>
+        }
+    }
+}

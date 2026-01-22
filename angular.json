@@ -1,10 +1,96 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "cli": {
-    "packageManager": "npm"
-  },
-  "newProjectRoot": "projects",
-  "projects": {
-  }
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "cli": {
+        "packageManager": "npm",
+        "schematicCollections": [
+            "angular-eslint"
+        ]
+    },
+    "newProjectRoot": "projects",
+    "projects": {
+        "blocks-angular-renderer": {
+            "projectType": "library",
+            "root": "projects/blocks-angular-renderer",
+            "sourceRoot": "projects/blocks-angular-renderer/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular/build:ng-packagr",
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/blocks-angular-renderer/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/blocks-angular-renderer/tsconfig.lib.json"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test",
+                    "options": {
+                        "tsConfig": "projects/blocks-angular-renderer/tsconfig.spec.json"
+                    }
+                }
+            }
+        },
+        "playground": {
+            "projectType": "application",
+            "schematics": {},
+            "root": "projects/playground",
+            "sourceRoot": "projects/playground/src",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "outputPath": "dist/playground",
+                        "index": "projects/playground/src/index.html",
+                        "browser": "projects/playground/src/main.ts",
+                        "polyfills": [],
+                        "tsConfig": "projects/playground/tsconfig.app.json",
+                        "assets": [],
+                        "styles": [],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "500kb",
+                                    "maximumError": "1mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
+                                }
+                            ],
+                            "outputHashing": "all"
+                        },
+                        "development": {
+                            "optimization": false,
+                            "extractLicenses": false,
+                            "sourceMap": true
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "serve": {
+                    "builder": "@angular/build:dev-server",
+                    "configurations": {
+                        "production": {
+                            "buildTarget": "playground:build:production"
+                        },
+                        "development": {
+                            "buildTarget": "playground:build:development"
+                        }
+                    },
+                    "defaultConfiguration": "development"
+                }
+            }
+        }
+    }
 }

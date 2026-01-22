@@ -1,40 +1,58 @@
 {
-  "name": "blocks-angular-renderer",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
-  },
-  "prettier": {
-    "printWidth": 100,
-    "singleQuote": true,
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
-  },
-  "private": true,
-  "packageManager": "npm@10.9.2",
-  "dependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/compiler": "^21.0.0",
-    "@angular/core": "^21.0.0",
-    "@angular/forms": "^21.0.0",
-    "@angular/platform-browser": "^21.0.0",
-    "@angular/router": "^21.0.0",
-    "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
-  },
-  "devDependencies": {
-    "@angular/cli": "^21.0.4",
-    "@angular/compiler-cli": "^21.0.0",
-    "typescript": "~5.9.2"
-  }
+    "name": "blocks-angular-renderer",
+    "version": "0.0.0",
+    "scripts": {
+        "ng": "ng",
+        "start": "ng serve",
+        "start:playground": "ng serve --project=playground",
+        "build:lib": "ng build --project=blocks-angular-renderer",
+        "build:playground": "ng build --project=playground",
+        "watch": "ng build --watch --configuration development",
+        "test": "ng test",
+        "lint": "ng lint",
+        "format": "prettier --write \"projects/**/*.{ts,html,scss}\"",
+        "copy-readme": "cp README.md dist/blocks-angular-renderer/README.md",
+        "publish:lib": "npm run build:lib && npm run copy-readme && cd dist/blocks-angular-renderer && npm publish",
+        "publish:lib:dry-run": "npm run build:lib && npm run copy-readme && cd dist/blocks-angular-renderer && npm publish --dry-run"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "singleQuote": true,
+        "tabWidth": 4,
+        "overrides": [
+            {
+                "files": "*.html",
+                "options": {
+                    "parser": "angular"
+                }
+            }
+        ]
+    },
+    "private": true,
+    "packageManager": "npm@10.9.2",
+    "dependencies": {
+        "@angular/common": "^21.0.0",
+        "@angular/compiler": "^21.0.0",
+        "@angular/core": "^21.0.0",
+        "@angular/forms": "^21.0.0",
+        "@angular/platform-browser": "^21.0.0",
+        "@angular/router": "^21.0.0",
+        "rxjs": "~7.8.0",
+        "tslib": "^2.3.0"
+    },
+    "devDependencies": {
+        "@angular/build": "^21.1.1",
+        "@angular/cli": "^21.0.4",
+        "@angular/compiler-cli": "^21.0.0",
+        "angular-eslint": "21.1.0",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-prettier": "^5.5.5",
+        "jsdom": "^27.1.0",
+        "ng-packagr": "^21.1.0",
+        "prettier": "^3.8.1",
+        "typescript": "~5.9.2",
+        "typescript-eslint": "8.47.0",
+        "vitest": "^4.0.8"
+    }
 }

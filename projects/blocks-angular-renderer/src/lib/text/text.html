@@ -1,0 +1,6 @@
+@for (part of textParts; track $index) {
+    @if ($index > 0) {
+        <br />
+    }
+    <span [innerHTML]="applyModifiers(part)"></span>
+}

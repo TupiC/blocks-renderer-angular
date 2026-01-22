@@ -1,0 +1,46 @@
+# Source files
+projects/
+src/
+*.ts
+!*.d.ts
+
+# Build files
+.angular/
+node_modules/
+dist/playground/
+
+# Development files
+.vscode/
+.github/
+.editorconfig
+.gitignore
+.npmignore
+
+# Config files
+tsconfig.json
+tsconfig.*.json
+angular.json
+.prettierrc*
+.prettierignore
+
+# Test files
+*.spec.ts
+coverage/
+__screenshots__/
+
+# Documentation
+README.md
+LICENSE
+
+# Playground (demo app)
+playground/
+
+# CI/CD
+.github/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+yarn-error.log*
