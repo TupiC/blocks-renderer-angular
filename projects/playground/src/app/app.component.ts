@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { BlocksRenderer } from 'blocks-angular-renderer';
-import type { BlocksContent } from 'blocks-angular-renderer';
+import { BlocksRenderer } from 'blocks-renderer-angular';
+import type { BlocksContent } from 'blocks-renderer-angular';
 
 @Component({
     selector: 'app-root',

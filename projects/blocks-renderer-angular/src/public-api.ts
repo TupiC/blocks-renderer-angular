@@ -1,5 +1,5 @@
 /*
- * Public API Surface of blocks-angular-renderer
+ * Public API Surface of blocks-renderer-angular
  */
 
 export * from './lib/types';

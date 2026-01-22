@@ -1,18 +1,18 @@
-# blocks-angular-renderer
+# blocks-renderer-angular
 
 Angular library for rendering [Strapi blocks content](https://docs.strapi.io/cms/features/content-type-builder#rich-text-blocks) with customizable components.
 
 ## Installation
 
 ```bash
-npm install blocks-angular-renderer
+npm install blocks-renderer-angular
 ```
 
 ## Usage
 
 ```typescript
-import { BlocksRenderer } from 'blocks-angular-renderer';
-import { BlocksContent } from 'blocks-angular-renderer';
+import { BlocksRenderer } from 'blocks-renderer-angular';
+import { BlocksContent } from 'blocks-renderer-angular';
 
 @Component({
   selector: 'app-content',

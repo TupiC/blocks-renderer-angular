@@ -304,10 +304,10 @@ describe('BlocksRenderer', () => {
             expect(getByText(native, 'Should not appear')).toBeFalsy();
             expect(warnSpy).toHaveBeenCalledTimes(2);
             expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-angular-renderer] No component found for block type "unknown"',
+                '[blocks-renderer-angular] No component found for block type "unknown"',
             );
             expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-angular-renderer] No component found for block type "unknown2"',
+                '[blocks-renderer-angular] No component found for block type "unknown2"',
             );
             warnSpy.mockRestore();
         });
@@ -387,10 +387,10 @@ describe('BlocksRenderer', () => {
             expect(getByText(native, /my paragraph/i)).toBeTruthy();
             expect(warnSpy).toHaveBeenCalledTimes(2);
             expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-angular-renderer] No component found for modifier "bold"',
+                '[blocks-renderer-angular] No component found for modifier "bold"',
             );
             expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-angular-renderer] No component found for modifier "italic"',
+                '[blocks-renderer-angular] No component found for modifier "italic"',
             );
             warnSpy.mockRestore();
         });

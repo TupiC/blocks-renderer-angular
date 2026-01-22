@@ -54,7 +54,7 @@ export class ComponentsContextService {
     addMissingBlockType(type: string): void {
         if (!this.context.missingBlockTypes.includes(type)) {
             console.warn(
-                `[blocks-angular-renderer] No component found for block type "${type}"`,
+                `[blocks-renderer-angular] No component found for block type "${type}"`,
             );
             this.context.missingBlockTypes.push(type);
         }
@@ -63,7 +63,7 @@ export class ComponentsContextService {
     addMissingModifierType(modifier: string): void {
         if (!this.context.missingModifierTypes.includes(modifier)) {
             console.warn(
-                `[blocks-angular-renderer] No component found for modifier "${modifier}"`,
+                `[blocks-renderer-angular] No component found for modifier "${modifier}"`,
             );
             this.context.missingModifierTypes.push(modifier);
         }

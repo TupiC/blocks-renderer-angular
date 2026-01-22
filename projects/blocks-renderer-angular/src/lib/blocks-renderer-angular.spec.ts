@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlocksAngularRenderer } from './blocks-angular-renderer';
+import { BlocksRendererAngular } from './blocks-renderer-angular';
 
-describe('BlocksAngularRenderer', () => {
-    let component: BlocksAngularRenderer;
-    let fixture: ComponentFixture<BlocksAngularRenderer>;
+describe('BlocksRendererAngular', () => {
+    let component: BlocksRendererAngular;
+    let fixture: ComponentFixture<BlocksRendererAngular>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [BlocksAngularRenderer],
+            imports: [BlocksRendererAngular],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(BlocksAngularRenderer);
+        fixture = TestBed.createComponent(BlocksRendererAngular);
         component = fixture.componentInstance;
         await fixture.whenStable();
     });

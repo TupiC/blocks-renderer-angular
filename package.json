@@ -1,19 +1,19 @@
 {
-    "name": "blocks-angular-renderer",
+    "name": "blocks-renderer-angular",
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
         "start:playground": "ng serve --project=playground",
-        "build:lib": "ng build --project=blocks-angular-renderer",
+        "build:lib": "ng build --project=blocks-renderer-angular",
         "build:playground": "ng build --project=playground",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
         "lint": "ng lint",
         "format": "prettier --write \"projects/**/*.{ts,html,scss}\"",
-        "copy-readme": "cp README.md dist/blocks-angular-renderer/README.md",
-        "publish:lib": "npm run build:lib && npm run copy-readme && cd dist/blocks-angular-renderer && npm publish",
-        "publish:lib:dry-run": "npm run build:lib && npm run copy-readme && cd dist/blocks-angular-renderer && npm publish --dry-run"
+        "copy-readme": "cp README.md dist/blocks-renderer-angular/README.md",
+        "publish:lib": "npm run build:lib && npm run copy-readme && cd dist/blocks-renderer-angular && npm publish",
+        "publish:lib:dry-run": "npm run build:lib && npm run copy-readme && cd dist/blocks-renderer-angular && npm publish --dry-run"
     },
     "prettier": {
         "printWidth": 100,
