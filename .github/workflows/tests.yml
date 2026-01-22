@@ -15,7 +15,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  repository: "blocks-renderer-angular"
+                  repository: "TupiC/blocks-renderer-angular"
                   persist-credentials: false
             - uses: actions/setup-node@v3
               with:
@@ -34,7 +34,7 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  repository: "blocks-renderer-angular"
+                  repository: "TupiC/blocks-renderer-angular"
                   persist-credentials: false
             - uses: actions/setup-node@v3
               with:
