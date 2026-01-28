@@ -15,7 +15,7 @@ describe('Text', () => {
 
         fixture = TestBed.createComponent(Text);
         component = fixture.componentInstance;
-        component.text = 'test';
+        fixture.componentRef.setInput('text', 'test');
         fixture.detectChanges();
         await fixture.whenStable();
     });

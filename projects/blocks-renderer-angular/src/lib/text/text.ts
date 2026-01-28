@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import type { Modifier } from '../types';
@@ -11,28 +11,28 @@ import { ComponentsContextService } from '../components-context.service';
     standalone: true,
 })
 export class Text {
-    @Input() text!: string;
-    @Input() bold?: boolean;
-    @Input() italic?: boolean;
-    @Input() underline?: boolean;
-    @Input() strikethrough?: boolean;
-    @Input() code?: boolean;
+    text = input.required<string>();
+    bold = input<boolean>();
+    italic = input<boolean>();
+    underline = input<boolean>();
+    strikethrough = input<boolean>();
+    code = input<boolean>();
 
     private componentsContext = inject(ComponentsContextService);
     private sanitizer = inject(DomSanitizer);
 
     get modifiers(): Modifier[] {
         const mods: Modifier[] = [];
-        if (this.bold) mods.push('bold');
-        if (this.italic) mods.push('italic');
-        if (this.underline) mods.push('underline');
-        if (this.strikethrough) mods.push('strikethrough');
-        if (this.code) mods.push('code');
+        if (this.bold()) mods.push('bold');
+        if (this.italic()) mods.push('italic');
+        if (this.underline()) mods.push('underline');
+        if (this.strikethrough()) mods.push('strikethrough');
+        if (this.code()) mods.push('code');
         return mods;
     }
 
     get textParts(): string[] {
-        return this.text.split(/\r?\n|\r/g);
+        return this.text().split(/\r?\n|\r/g);
     }
 
     getModifierComponent(modifierName: Modifier): any {

@@ -16,10 +16,10 @@ describe('Block', () => {
 
         fixture = TestBed.createComponent(Block);
         component = fixture.componentInstance;
-        component.content = {
+        fixture.componentRef.setInput('content', {
             type: 'paragraph',
             children: [{ type: 'text', text: 'test' }],
-        } as ParagraphBlockNode;
+        } as ParagraphBlockNode);
         fixture.detectChanges();
         await fixture.whenStable();
     });

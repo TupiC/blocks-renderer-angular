@@ -4,14 +4,16 @@
     <br />
 } @else if (isVoidType) {
     <!-- Void types don't render children -->
-    @switch (content.type) {
+    @let c = content();
+    @switch (c.type) {
         @case ('image') {
-            <img [src]="content.image.url" [alt]="content.image.alternativeText || ''" />
+            <img [src]="c.image.url" [alt]="c.image.alternativeText || ''" />
         }
     }
 } @else {
     <!-- Render block with children -->
-    @switch (content.type) {
+    @let c = content();
+    @switch (c.type) {
         @case ('paragraph') {
             <p>
                 @for (childNode of childrenNodes; track $index) {
@@ -54,7 +56,7 @@
       </pre>
         }
         @case ('heading') {
-            @switch (content.level) {
+            @switch (c.level) {
                 @case (1) {
                     <h1>{{ plainText }}</h1>
                 }
@@ -76,15 +78,15 @@
             }
         }
         @case ('list') {
-            @if (content.format === 'ordered') {
+            @if (c.format === 'ordered') {
                 <ol>
-                    @for (childNode of content.children; track $index) {
+                    @for (childNode of c.children; track $index) {
                         <lib-block [content]="childNode" />
                     }
                 </ol>
             } @else {
                 <ul>
-                    @for (childNode of content.children; track $index) {
+                    @for (childNode of c.children; track $index) {
                         <lib-block [content]="childNode" />
                     }
                 </ul>
@@ -109,7 +111,7 @@
             </li>
         }
         @case ('link') {
-            <a [href]="content.url">
+            <a [href]="c.url">
                 @for (childNode of childrenNodes; track $index) {
                     @if (childNode.type === 'text') {
                         <lib-text
