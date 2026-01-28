@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/TupiC/blocks-renderer-angular/compare/v1.0.0...v1.0.1) (2026-01-28)
+
+
+### Bug Fixes
+
+* use input signals instead of deprecated @Input() ([8fb9a4f](https://github.com/TupiC/blocks-renderer-angular/commit/8fb9a4fc6cd7a31a27a0404368403a1010005b74))
+
 # 1.0.0 (2026-01-28)
 
 
