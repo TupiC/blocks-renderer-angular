@@ -1,9 +1,7 @@
-import { Component, Input, inject, OnInit } from '@angular/core';
+import { Component, input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { Node, DefaultInlineNode } from '../types';
-import {
-    BlockComponent, ComponentsContextService
-} from '../components-context.service';
+import { BlockComponent, ComponentsContextService } from '../components-context.service';
 import { Text } from '../text/text';
 
 const VOID_TYPES = ['image'];
@@ -26,16 +24,16 @@ const KNOWN_BLOCK_TYPES = [
     standalone: true,
 })
 export class Block implements OnInit {
-    @Input() content!: Node;
+    content = input.required<Node>();
 
     private componentsContext = inject(ComponentsContextService);
 
     get blockComponent(): BlockComponent | undefined {
-        return this.componentsContext.getBlockComponent(this.content.type);
+        return this.componentsContext.getBlockComponent(this.content().type);
     }
 
     get isKnownType(): boolean {
-        return (KNOWN_BLOCK_TYPES as readonly string[]).includes(this.content.type);
+        return (KNOWN_BLOCK_TYPES as readonly string[]).includes(this.content().type);
     }
 
     get shouldRender(): boolean {
@@ -43,28 +41,31 @@ export class Block implements OnInit {
     }
 
     get isVoidType(): boolean {
-        return VOID_TYPES.includes(this.content.type);
+        return VOID_TYPES.includes(this.content().type);
     }
 
     get isEmptyParagraph(): boolean {
+        const c = this.content();
         return (
-            this.content.type === 'paragraph' &&
-            this.content.children.length === 1 &&
-            this.content.children[0].type === 'text' &&
-            this.content.children[0].text === ''
+            c.type === 'paragraph' &&
+            c.children.length === 1 &&
+            c.children[0].type === 'text' &&
+            c.children[0].text === ''
         );
     }
 
     get plainText(): string | undefined {
-        if (this.content.type === 'code' || this.content.type === 'heading') {
-            return this.getPlainText(this.content.children);
+        const c = this.content();
+        if (c.type === 'code' || c.type === 'heading') {
+            return this.getPlainText(c.children);
         }
         return undefined;
     }
 
     get blockProps(): any {
-        const { children, type, ...props } = this.content;
-        if (this.content.type === 'code' || this.content.type === 'heading') {
+        const c = this.content();
+        const { children, type, ...props } = c;
+        if (c.type === 'code' || c.type === 'heading') {
             return {
                 ...props,
                 plainText: this.plainText,
@@ -74,7 +75,7 @@ export class Block implements OnInit {
     }
 
     get childrenNodes(): DefaultInlineNode[] {
-        return this.content.children as DefaultInlineNode[];
+        return this.content().children as DefaultInlineNode[];
     }
 
     private getPlainText(children: DefaultInlineNode[]): string {
@@ -91,7 +92,7 @@ export class Block implements OnInit {
 
     ngOnInit(): void {
         if (!this.shouldRender) {
-            this.componentsContext.addMissingBlockType(this.content.type);
+            this.componentsContext.addMissingBlockType(this.content().type);
         }
     }
 }

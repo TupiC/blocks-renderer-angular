@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { BlocksContent } from '../types';
 import {
@@ -16,19 +16,19 @@ import { Block } from '../block/block';
     providers: [ComponentsContextService],
 })
 export class BlocksRenderer implements OnInit {
-    @Input() content!: BlocksContent;
-    @Input() blocks?: Partial<BlocksComponents>;
-    @Input() modifiers?: Partial<ModifiersComponents>;
+    content = input.required<BlocksContent>();
+    blocks = input<Partial<BlocksComponents>>();
+    modifiers = input<Partial<ModifiersComponents>>();
 
     private componentsContext = inject(ComponentsContextService);
 
     ngOnInit(): void {
         const blocks: BlocksComponents = {
-            ...(this.blocks as BlocksComponents),
+            ...(this.blocks() as BlocksComponents),
         };
 
         const modifiers: ModifiersComponents = {
-            ...(this.modifiers as ModifiersComponents),
+            ...(this.modifiers() as ModifiersComponents),
         };
 
         this.componentsContext.setContext({
