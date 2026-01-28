@@ -1,3 +1,16 @@
+# 1.0.0 (2026-01-28)
+
+
+### Bug Fixes
+
+* repository name in test workflow ([9c8605b](https://github.com/TupiC/blocks-renderer-angular/commit/9c8605b0c8917d0d692bf8a2a2220de2db23df82))
+
+
+### Features
+
+* add library + tests ([4db3aba](https://github.com/TupiC/blocks-renderer-angular/commit/4db3aba89dbc9ceb9c9bbe5fb467629105dfa402))
+* add semantic-release for automated npm and GitHub releases ([de3e639](https://github.com/TupiC/blocks-renderer-angular/commit/de3e639eaab4be609cb920b71930185009574261))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
