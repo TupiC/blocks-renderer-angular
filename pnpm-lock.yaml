@@ -91,6 +91,20 @@ importers:
         specifier: ^4.0.8
         version: 4.0.18(jsdom@27.4.0)(less@4.6.7)(sass@1.97.1)
 
+  projects/blocks-renderer-angular:
+    dependencies:
+      '@angular/common':
+        specifier: ^21.1.0
+        version: 21.1.1(@angular/core@21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2))(rxjs@7.8.2)
+      '@angular/core':
+        specifier: ^21.1.0
+        version: 21.1.1(@angular/compiler@21.1.1)(rxjs@7.8.2)
+      tslib:
+        specifier: ^2.3.0
+        version: 2.8.1
+
+  projects/playground: {}
+
 packages:
 
   '@acemir/cssom@0.9.31':
