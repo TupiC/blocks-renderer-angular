@@ -1,6 +1,6 @@
 {
     "name": "blocks-renderer-angular",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "description": "Angular library for rendering Strapi blocks content with customizable components",
     "keywords": [
         "angular",

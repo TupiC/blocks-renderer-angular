@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TupiC/blocks-renderer-angular/compare/v1.0.1...v1.1.0) (2026-07-19)
+
+
+### Features
+
+* **renderer:** support custom block and modifier components ([7a452b6](https://github.com/TupiC/blocks-renderer-angular/commit/7a452b604428236343eb6dcc7587cde3620e7608))
+
 ## [1.0.1](https://github.com/TupiC/blocks-renderer-angular/compare/v1.0.0...v1.0.1) (2026-01-28)
 
 
