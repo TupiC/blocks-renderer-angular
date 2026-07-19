@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/TupiC/blocks-renderer-angular/compare/v1.1.0...v1.1.1) (2026-07-19)
+
+
+### Bug Fixes
+
+* **block:** render br for childless empty paragraphs ([87be35c](https://github.com/TupiC/blocks-renderer-angular/commit/87be35c5bc916ee9f0fa665d7b5f4e04a5a3f07f))
+
 # [1.1.0](https://github.com/TupiC/blocks-renderer-angular/compare/v1.0.1...v1.1.0) (2026-07-19)
 
 
