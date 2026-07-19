@@ -1,6 +1,81 @@
+<ng-template #renderModifiers let-part let-modifierIndex="modifierIndex">
+    @if (modifierIndex < modifiers().length) {
+        @let modifier = modifiers()[modifierIndex];
+        @if (getModifierComponent(modifier); as customComponent) {
+            <ng-container
+                [libDynamicComponent]="customComponent"
+                [libDynamicComponentContent]="renderModifiers"
+                [libDynamicComponentContentContext]="{
+                    $implicit: part,
+                    modifierIndex: modifierIndex + 1,
+                }"
+            />
+        } @else {
+            @switch (modifier) {
+                @case ('bold') {
+                    <strong
+                        ><ng-container
+                            [ngTemplateOutlet]="renderModifiers"
+                            [ngTemplateOutletContext]="{
+                                $implicit: part,
+                                modifierIndex: modifierIndex + 1,
+                            }"
+                    /></strong>
+                }
+                @case ('italic') {
+                    <em
+                        ><ng-container
+                            [ngTemplateOutlet]="renderModifiers"
+                            [ngTemplateOutletContext]="{
+                                $implicit: part,
+                                modifierIndex: modifierIndex + 1,
+                            }"
+                    /></em>
+                }
+                @case ('underline') {
+                    <u
+                        ><ng-container
+                            [ngTemplateOutlet]="renderModifiers"
+                            [ngTemplateOutletContext]="{
+                                $implicit: part,
+                                modifierIndex: modifierIndex + 1,
+                            }"
+                    /></u>
+                }
+                @case ('strikethrough') {
+                    <del
+                        ><ng-container
+                            [ngTemplateOutlet]="renderModifiers"
+                            [ngTemplateOutletContext]="{
+                                $implicit: part,
+                                modifierIndex: modifierIndex + 1,
+                            }"
+                    /></del>
+                }
+                @case ('code') {
+                    <code
+                        ><ng-container
+                            [ngTemplateOutlet]="renderModifiers"
+                            [ngTemplateOutletContext]="{
+                                $implicit: part,
+                                modifierIndex: modifierIndex + 1,
+                            }"
+                    /></code>
+                }
+            }
+        }
+    } @else {
+        <ng-container>{{ part }}</ng-container>
+    }
+</ng-template>
+
 @for (part of textParts; track $index) {
     @if ($index > 0) {
         <br />
     }
-    <span [innerHTML]="applyModifiers(part)"></span>
+    <span
+        ><ng-container
+            [ngTemplateOutlet]="renderModifiers"
+            [ngTemplateOutletContext]="{ $implicit: part, modifierIndex: 0 }"
+    /></span>
 }

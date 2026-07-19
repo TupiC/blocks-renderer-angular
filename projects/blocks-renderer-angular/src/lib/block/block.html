@@ -1,9 +1,31 @@
+<ng-template #renderChildren>
+    @for (childNode of childrenNodes; track $index) {
+        @if (childNode.type === 'text') {
+            <lib-text
+                [text]="childNode.text"
+                [bold]="childNode.bold"
+                [italic]="childNode.italic"
+                [underline]="childNode.underline"
+                [strikethrough]="childNode.strikethrough"
+                [code]="childNode.code"
+            />
+        } @else {
+            <lib-block [content]="childNode" />
+        }
+    }
+</ng-template>
+
 @if (!shouldRender) {
     <!-- Block type not found, silently ignore -->
+} @else if (blockComponent; as customComponent) {
+    <ng-container
+        [libDynamicComponent]="customComponent"
+        [libDynamicComponentInputs]="blockProps()"
+        [libDynamicComponentContent]="isVoidType ? undefined : renderChildren"
+    />
 } @else if (isEmptyParagraph) {
     <br />
 } @else if (isVoidType) {
-    <!-- Void types don't render children -->
     @let c = content();
     @switch (c.type) {
         @case ('image') {
@@ -11,49 +33,16 @@
         }
     }
 } @else {
-    <!-- Render block with children -->
     @let c = content();
     @switch (c.type) {
         @case ('paragraph') {
-            <p>
-                @for (childNode of childrenNodes; track $index) {
-                    @if (childNode.type === 'text') {
-                        <lib-text
-                            [text]="childNode.text"
-                            [bold]="childNode.bold"
-                            [italic]="childNode.italic"
-                            [underline]="childNode.underline"
-                            [strikethrough]="childNode.strikethrough"
-                            [code]="childNode.code"
-                        />
-                    } @else {
-                        <lib-block [content]="childNode" />
-                    }
-                }
-            </p>
+            <p><ng-container [ngTemplateOutlet]="renderChildren" /></p>
         }
         @case ('quote') {
-            <blockquote>
-                @for (childNode of childrenNodes; track $index) {
-                    @if (childNode.type === 'text') {
-                        <lib-text
-                            [text]="childNode.text"
-                            [bold]="childNode.bold"
-                            [italic]="childNode.italic"
-                            [underline]="childNode.underline"
-                            [strikethrough]="childNode.strikethrough"
-                            [code]="childNode.code"
-                        />
-                    } @else {
-                        <lib-block [content]="childNode" />
-                    }
-                }
-            </blockquote>
+            <blockquote><ng-container [ngTemplateOutlet]="renderChildren" /></blockquote>
         }
         @case ('code') {
-            <pre>
-        <code>{{ plainText }}</code>
-      </pre>
+            <pre><code>{{ plainText }}</code></pre>
         }
         @case ('heading') {
             @switch (c.level) {
@@ -93,40 +82,10 @@
             }
         }
         @case ('list-item') {
-            <li>
-                @for (childNode of childrenNodes; track $index) {
-                    @if (childNode.type === 'text') {
-                        <lib-text
-                            [text]="childNode.text"
-                            [bold]="childNode.bold"
-                            [italic]="childNode.italic"
-                            [underline]="childNode.underline"
-                            [strikethrough]="childNode.strikethrough"
-                            [code]="childNode.code"
-                        />
-                    } @else {
-                        <lib-block [content]="childNode" />
-                    }
-                }
-            </li>
+            <li><ng-container [ngTemplateOutlet]="renderChildren" /></li>
         }
         @case ('link') {
-            <a [href]="c.url">
-                @for (childNode of childrenNodes; track $index) {
-                    @if (childNode.type === 'text') {
-                        <lib-text
-                            [text]="childNode.text"
-                            [bold]="childNode.bold"
-                            [italic]="childNode.italic"
-                            [underline]="childNode.underline"
-                            [strikethrough]="childNode.strikethrough"
-                            [code]="childNode.code"
-                        />
-                    } @else {
-                        <lib-block [content]="childNode" />
-                    }
-                }
-            </a>
+            <a [href]="c.url"><ng-container [ngTemplateOutlet]="renderChildren" /></a>
         }
     }
 }

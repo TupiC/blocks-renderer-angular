@@ -1,8 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, input } from '@angular/core';
 import { vi } from 'vitest';
 
 import { BlocksRenderer } from './blocks-renderer';
 import type { RootNode, BlocksContent } from '../types';
+
+@Component({
+    selector: 'test-custom-block',
+    template: `<section class="custom-block"><ng-content /></section>`,
+})
+class CustomBlock {}
+
+@Component({
+    selector: 'test-custom-heading',
+    template: `<h2 class="custom-heading">{{ level() }}:{{ plainText() }}</h2>`,
+})
+class CustomHeading {
+    level = input.required<number>();
+    plainText = input.required<string>();
+}
+
+@Component({
+    selector: 'test-custom-modifier',
+    template: `<mark class="custom-modifier"><ng-content /></mark>`,
+})
+class CustomModifier {}
 
 const content: RootNode[] = [
     {
@@ -35,15 +57,12 @@ function getByText(el: HTMLElement, text: string | RegExp): HTMLElement | null {
     const walk = (node: Element): HTMLElement | null => {
         if (node.nodeType === Node.ELEMENT_NODE) {
             const el = node as HTMLElement;
-            const t =
-                el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE
-                    ? el.textContent?.trim()
-                    : null;
-            if (t && (typeof text === 'string' ? t === text : text.test(t))) return el;
             for (const c of Array.from(node.children)) {
                 const found = walk(c);
                 if (found) return found;
             }
+            const t = el.textContent?.trim();
+            if (t && (typeof text === 'string' ? t === text : text.test(t))) return el;
         }
         return null;
     };
@@ -91,6 +110,28 @@ describe('BlocksRenderer', () => {
             });
             expect(getByText(native, 'A simple paragraph')).toBeTruthy();
             expect(native.querySelector('h1')?.textContent?.trim()).toBe('A cool website');
+        });
+
+        it('reacts when blocks and modifiers inputs change', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: 'Reactive content', bold: true }],
+                    },
+                ],
+            });
+
+            expect(native.querySelector('.custom-block')).toBeFalsy();
+            expect(native.querySelector('.custom-modifier')).toBeFalsy();
+
+            fixture.componentRef.setInput('blocks', { paragraph: CustomBlock });
+            fixture.componentRef.setInput('modifiers', { bold: CustomModifier });
+            fixture.detectChanges();
+
+            expect(native.querySelector('.custom-block')).toBeTruthy();
+            expect(native.querySelector('.custom-modifier')).toBeTruthy();
+            expect(native.textContent).toContain('Reactive content');
         });
     });
 
@@ -281,6 +322,48 @@ describe('BlocksRenderer', () => {
             expect(img?.getAttribute('src')).toBe('https://test.com/test.jpg');
         });
 
+        it('renders registered components with projected children and block inputs', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: 'Custom paragraph' }],
+                    },
+                    {
+                        type: 'heading',
+                        level: 3,
+                        children: [{ type: 'text', text: 'Custom heading' }],
+                    },
+                ],
+                blocks: { paragraph: CustomBlock, heading: CustomHeading },
+            });
+
+            expect(native.querySelector('.custom-block')?.textContent?.trim()).toBe(
+                'Custom paragraph',
+            );
+            expect(native.querySelector('.custom-heading')?.textContent?.trim()).toBe(
+                '3:Custom heading',
+            );
+            expect(native.querySelector('p')).toBeFalsy();
+            expect(native.querySelector('h3')).toBeFalsy();
+        });
+
+        it('renders a registered custom block type', () => {
+            render({
+                content: [
+                    {
+                        type: 'callout',
+                        children: [{ type: 'text', text: 'Custom callout' }],
+                    } as unknown as RootNode,
+                ],
+                blocks: { callout: CustomBlock },
+            });
+
+            expect(native.querySelector('.custom-block')?.textContent?.trim()).toBe(
+                'Custom callout',
+            );
+        });
+
         it('handles missing block components', () => {
             const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -365,7 +448,7 @@ describe('BlocksRenderer', () => {
             expect(text?.closest('strong')).toBeFalsy();
         });
 
-        it('handles missing modifier components', () => {
+        it('uses default modifiers without missing-component warnings', () => {
             const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
             render({
@@ -385,14 +468,47 @@ describe('BlocksRenderer', () => {
             });
 
             expect(getByText(native, /my paragraph/i)).toBeTruthy();
-            expect(warnSpy).toHaveBeenCalledTimes(2);
-            expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-renderer-angular] No component found for modifier "bold"',
-            );
-            expect(warnSpy).toHaveBeenCalledWith(
-                '[blocks-renderer-angular] No component found for modifier "italic"',
-            );
+            expect(warnSpy).not.toHaveBeenCalled();
             warnSpy.mockRestore();
+        });
+
+        it('renders custom modifiers while preserving modifier nesting', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [
+                            {
+                                type: 'text',
+                                text: 'Custom formatting',
+                                bold: true,
+                                italic: true,
+                            },
+                        ],
+                    },
+                ],
+                modifiers: { bold: CustomModifier },
+            });
+
+            const customModifier = native.querySelector('mark.custom-modifier');
+            expect(customModifier).toBeTruthy();
+            expect(customModifier?.querySelector('em')?.textContent?.trim()).toBe(
+                'Custom formatting',
+            );
+        });
+
+        it('renders HTML-looking text as literal text', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: '<em>literal</em>', bold: true }],
+                    },
+                ],
+            });
+
+            expect(native.querySelector('em')).toBeFalsy();
+            expect(native.querySelector('strong')?.textContent).toBe('<em>literal</em>');
         });
 
         it('parses code blocks to plain text', () => {

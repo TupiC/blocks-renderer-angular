@@ -3,9 +3,7 @@
     "version": 1,
     "cli": {
         "packageManager": "npm",
-        "schematicCollections": [
-            "angular-eslint"
-        ]
+        "schematicCollections": ["angular-eslint"]
     },
     "newProjectRoot": "projects",
     "projects": {
@@ -31,6 +29,15 @@
                     "builder": "@angular/build:unit-test",
                     "options": {
                         "tsConfig": "projects/blocks-renderer-angular/tsconfig.spec.json"
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/blocks-renderer-angular/**/*.ts",
+                            "projects/blocks-renderer-angular/**/*.html"
+                        ]
                     }
                 }
             }
@@ -89,6 +96,15 @@
                         }
                     },
                     "defaultConfiguration": "development"
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "projects/playground/**/*.ts",
+                            "projects/playground/**/*.html"
+                        ]
+                    }
                 }
             }
         }

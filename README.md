@@ -11,8 +11,29 @@ npm install blocks-renderer-angular
 ## Usage
 
 ```typescript
+import { Component, input } from '@angular/core';
 import { BlocksRenderer } from 'blocks-renderer-angular';
-import { BlocksContent } from 'blocks-renderer-angular';
+import type { BlocksContent } from 'blocks-renderer-angular';
+
+@Component({
+    selector: 'app-paragraph',
+    template: `<p class="custom-paragraph"><ng-content /></p>`,
+})
+export class MyParagraphComponent {}
+
+@Component({
+    selector: 'app-heading',
+    template: `<h2 class="custom-heading">{{ plainText() }}</h2>`,
+})
+export class MyHeadingComponent {
+    plainText = input.required<string>();
+}
+
+@Component({
+    selector: 'app-bold',
+    template: `<strong class="custom-bold"><ng-content /></strong>`,
+})
+export class MyBoldComponent {}
 
 @Component({
     selector: 'app-content',
@@ -41,6 +62,15 @@ export class ContentComponent {
     };
 }
 ```
+
+Custom block components replace the default element for their block type. Their rendered
+children are projected through `<ng-content />`, and all node properties except `type` and
+`children` are supplied as component inputs. Heading and code components also receive a
+`plainText` input. Void blocks such as images receive their node properties but no projected
+children.
+
+Custom modifier components wrap their remaining text and modifiers through `<ng-content />`.
+Any modifier without a registered component continues to use its default HTML element.
 
 ## Releasing
 

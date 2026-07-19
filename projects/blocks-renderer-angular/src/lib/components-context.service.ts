@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Type } from '@angular/core';
-import type { Node, Modifier } from './types';
+import type { Modifier } from './types';
 
 export interface BlockComponentProps {
-    [key: string]: any;
-    children?: any;
+    [key: string]: unknown;
+    children?: unknown;
     plainText?: string;
 }
 
-export type BlockComponent = Type<any>;
-export type ModifierComponent = Type<any>;
+export type BlockComponent = Type<unknown>;
+export type ModifierComponent = Type<unknown>;
 
 export interface BlocksComponents {
     [key: string]: BlockComponent;
@@ -53,18 +53,14 @@ export class ComponentsContextService {
 
     addMissingBlockType(type: string): void {
         if (!this.context.missingBlockTypes.includes(type)) {
-            console.warn(
-                `[blocks-renderer-angular] No component found for block type "${type}"`,
-            );
+            console.warn(`[blocks-renderer-angular] No component found for block type "${type}"`);
             this.context.missingBlockTypes.push(type);
         }
     }
 
     addMissingModifierType(modifier: string): void {
         if (!this.context.missingModifierTypes.includes(modifier)) {
-            console.warn(
-                `[blocks-renderer-angular] No component found for modifier "${modifier}"`,
-            );
+            console.warn(`[blocks-renderer-angular] No component found for modifier "${modifier}"`);
             this.context.missingModifierTypes.push(modifier);
         }
     }

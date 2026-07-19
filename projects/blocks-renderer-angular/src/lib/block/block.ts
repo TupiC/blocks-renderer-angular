@@ -1,8 +1,9 @@
-import { Component, input, inject, OnInit } from '@angular/core';
+import { Component, computed, input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { Node, DefaultInlineNode } from '../types';
 import { BlockComponent, ComponentsContextService } from '../components-context.service';
 import { Text } from '../text/text';
+import { DynamicComponentDirective } from '../dynamic-component.directive';
 
 const VOID_TYPES = ['image'];
 
@@ -19,7 +20,7 @@ const KNOWN_BLOCK_TYPES = [
 
 @Component({
     selector: 'lib-block',
-    imports: [CommonModule, Text],
+    imports: [CommonModule, DynamicComponentDirective, Text],
     templateUrl: './block.html',
     standalone: true,
 })
@@ -62,9 +63,11 @@ export class Block implements OnInit {
         return undefined;
     }
 
-    get blockProps(): any {
+    readonly blockProps = computed<Record<string, unknown>>(() => {
         const c = this.content();
-        const { children, type, ...props } = c;
+        const props: Record<string, unknown> = { ...c };
+        delete props['children'];
+        delete props['type'];
         if (c.type === 'code' || c.type === 'heading') {
             return {
                 ...props,
@@ -72,7 +75,7 @@ export class Block implements OnInit {
             };
         }
         return props;
-    }
+    });
 
     get childrenNodes(): DefaultInlineNode[] {
         return this.content().children as DefaultInlineNode[];
