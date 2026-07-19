@@ -21,25 +21,30 @@ jobs:
                   fetch-depth: 0
                   persist-credentials: false
 
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: '11.13.1'
+                  run_install: false
+
             - uses: actions/setup-node@v4
               with:
-                  node-version: "20"
-                  cache: "npm"
+                  node-version: '20'
+                  cache: 'pnpm'
 
             - name: Install dependencies
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Run tests
-              run: npm run test
+              run: pnpm test
 
             - name: Build library
-              run: npm run build:lib
+              run: pnpm build:lib
 
             - name: Copy README to dist
-              run: npm run copy-readme
+              run: pnpm copy-readme
 
             - name: Release
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-              run: npm run release
+              run: pnpm release

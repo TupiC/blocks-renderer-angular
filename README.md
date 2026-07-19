@@ -5,7 +5,7 @@ Angular library for rendering [Strapi blocks content](https://docs.strapi.io/cms
 ## Installation
 
 ```bash
-npm install blocks-renderer-angular
+pnpm add blocks-renderer-angular
 ```
 
 ## Usage

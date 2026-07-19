@@ -1,4 +1,4 @@
-name: "Tests"
+name: 'Tests'
 
 on:
     push:
@@ -6,11 +6,11 @@ on:
             - main
     pull_request:
         paths-ignore:
-            - "**.md?"
+            - '**.md?'
 
 jobs:
     unit_tests:
-        name: "unit_tests (node: ${{ matrix.node }})"
+        name: 'unit_tests (node: ${{ matrix.node }})'
         runs-on: ubuntu-latest
         strategy:
             matrix:
@@ -18,12 +18,17 @@ jobs:
         steps:
             - uses: actions/checkout@v4
               with:
-                  repository: "TupiC/blocks-renderer-angular"
+                  repository: 'TupiC/blocks-renderer-angular'
                   persist-credentials: false
-            - uses: actions/setup-node@v3
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: '11.13.1'
+                  run_install: false
+            - uses: actions/setup-node@v4
               with:
                   node-version: ${{ matrix.node }}
-            - name: "Run install"
-              run: npm install
-            - name: "Run tests"
-              run: npm run test
+                  cache: 'pnpm'
+            - name: 'Run install'
+              run: pnpm install --frozen-lockfile
+            - name: 'Run tests'
+              run: pnpm test

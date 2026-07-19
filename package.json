@@ -12,8 +12,8 @@
         "lint": "ng lint",
         "format": "prettier --write \"projects/**/*.{ts,html,scss}\"",
         "copy-readme": "cp README.md dist/blocks-renderer-angular/README.md",
-        "publish:lib": "npm run build:lib && npm run copy-readme && cd dist/blocks-renderer-angular && npm publish",
-        "publish:lib:dry-run": "npm run build:lib && npm run copy-readme && cd dist/blocks-renderer-angular && npm publish --dry-run",
+        "publish:lib": "pnpm build:lib && pnpm copy-readme && cd dist/blocks-renderer-angular && pnpm publish",
+        "publish:lib:dry-run": "pnpm build:lib && pnpm copy-readme && cd dist/blocks-renderer-angular && pnpm publish --dry-run --no-git-checks",
         "release": "semantic-release"
     },
     "prettier": {
@@ -30,7 +30,7 @@
         ]
     },
     "private": true,
-    "packageManager": "npm@10.9.2",
+    "packageManager": "pnpm@11.13.1",
     "dependencies": {
         "@angular/common": "^21.0.0",
         "@angular/compiler": "^21.0.0",
