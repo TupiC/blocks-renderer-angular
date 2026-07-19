@@ -177,6 +177,30 @@ describe('BlocksRenderer', () => {
             expect(br).toBeTruthy();
         });
 
+        it('renders a br when paragraph has no children', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: 'First paragraph' }],
+                    },
+                    { type: 'paragraph', children: [] },
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: 'Second paragraph' }],
+                    },
+                ],
+            });
+
+            expect(getByText(native, 'First paragraph')).toBeTruthy();
+            expect(getByText(native, 'Second paragraph')).toBeTruthy();
+            const blocks = native.querySelectorAll('lib-block');
+            expect(blocks.length).toBe(3);
+            const br = blocks[1].querySelector('br');
+            expect(br).toBeTruthy();
+            expect(blocks[1].querySelector('p')).toBeFalsy();
+        });
+
         it('renders paragraphs with line breaks', () => {
             render({
                 content: [

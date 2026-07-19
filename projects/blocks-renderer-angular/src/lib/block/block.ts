@@ -47,8 +47,15 @@ export class Block implements OnInit {
 
     get isEmptyParagraph(): boolean {
         const c = this.content();
+        if (c.type !== 'paragraph') {
+            return false;
+        }
+
+        if (c.children.length === 0) {
+            return true;
+        }
+
         return (
-            c.type === 'paragraph' &&
             c.children.length === 1 &&
             c.children[0].type === 'text' &&
             c.children[0].text === ''
