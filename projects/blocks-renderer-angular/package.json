@@ -14,7 +14,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/TupiC/blocks-renderer-angular.git"
+        "url": "git+https://github.com/TupiC/blocks-renderer-angular.git"
     },
     "homepage": "https://github.com/TupiC/blocks-renderer-angular#readme",
     "bugs": {
