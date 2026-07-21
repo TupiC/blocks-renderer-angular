@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/TupiC/blocks-renderer-angular/compare/v1.1.1...v1.2.0) (2026-07-21)
+
+
+### Features
+
+* **rules:** add text transform and css class hooks ([258cebd](https://github.com/TupiC/blocks-renderer-angular/commit/258cebd3c8ee79f612b9920a420425cc9de4433e))
+
 ## [1.1.1](https://github.com/TupiC/blocks-renderer-angular/compare/v1.1.0...v1.1.1) (2026-07-19)
 
 
