@@ -1,7 +1,11 @@
 import { Component, computed, input, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { Node, DefaultInlineNode } from '../types';
-import { BlockComponent, ComponentsContextService } from '../components-context.service';
+import {
+    BlockComponent,
+    ComponentsContextService,
+    RendererClass,
+} from '../components-context.service';
 import { Text } from '../text/text';
 import { DynamicComponentDirective } from '../dynamic-component.directive';
 
@@ -33,6 +37,10 @@ export class Block implements OnInit {
         return this.componentsContext.getBlockComponent(this.content().type);
     }
 
+    get blockClass(): RendererClass | undefined {
+        return this.componentsContext.getBlockClass(this.content());
+    }
+
     get isKnownType(): boolean {
         return (KNOWN_BLOCK_TYPES as readonly string[]).includes(this.content().type);
     }
@@ -56,9 +64,7 @@ export class Block implements OnInit {
         }
 
         return (
-            c.children.length === 1 &&
-            c.children[0].type === 'text' &&
-            c.children[0].text === ''
+            c.children.length === 1 && c.children[0].type === 'text' && c.children[0].text === ''
         );
     }
 
@@ -91,7 +97,7 @@ export class Block implements OnInit {
     private getPlainText(children: DefaultInlineNode[]): string {
         return children.reduce((currentPlainText: string, node) => {
             if (node.type === 'text') {
-                return currentPlainText.concat(node.text);
+                return currentPlainText.concat(this.componentsContext.transformText(node));
             }
             if (node.type === 'link') {
                 return currentPlainText.concat(this.getPlainText(node.children));

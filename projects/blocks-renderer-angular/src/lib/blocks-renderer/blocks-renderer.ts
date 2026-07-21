@@ -5,6 +5,7 @@ import {
     ComponentsContextService,
     type BlocksComponents,
     type ModifiersComponents,
+    type RendererRules,
 } from '../components-context.service';
 import { Block } from '../block/block';
 
@@ -19,6 +20,7 @@ export class BlocksRenderer implements OnChanges {
     content = input.required<BlocksContent>();
     blocks = input<Partial<BlocksComponents>>();
     modifiers = input<Partial<ModifiersComponents>>();
+    rules = input<RendererRules>();
 
     private componentsContext = inject(ComponentsContextService);
 
@@ -34,6 +36,7 @@ export class BlocksRenderer implements OnChanges {
         this.componentsContext.setContext({
             blocks,
             modifiers,
+            rules: this.rules() ?? {},
             missingBlockTypes: [],
             missingModifierTypes: [],
         });

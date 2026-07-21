@@ -1,6 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Type } from '@angular/core';
-import type { Modifier } from './types';
+import type { Modifier, Node, TextInlineNode } from './types';
+
+export type RendererClass =
+    | string
+    | string[]
+    | Set<string>
+    | Record<string, boolean | null | undefined>;
+
+export interface RendererRules {
+    transformText?: (node: TextInlineNode) => string;
+    textClass?: (node: TextInlineNode) => RendererClass;
+    blockClass?: (node: Node) => RendererClass;
+}
 
 export interface BlockComponentProps {
     [key: string]: unknown;
@@ -22,6 +34,7 @@ export interface ModifiersComponents {
 export interface ComponentsContextValue {
     blocks: BlocksComponents;
     modifiers: ModifiersComponents;
+    rules: RendererRules;
     missingBlockTypes: string[];
     missingModifierTypes: string[];
 }
@@ -31,6 +44,7 @@ export class ComponentsContextService {
     private context: ComponentsContextValue = {
         blocks: {},
         modifiers: {},
+        rules: {},
         missingBlockTypes: [],
         missingModifierTypes: [],
     };
@@ -49,6 +63,18 @@ export class ComponentsContextService {
 
     getModifierComponent(modifier: Modifier): ModifierComponent | undefined {
         return this.context.modifiers[modifier];
+    }
+
+    transformText(node: TextInlineNode): string {
+        return this.context.rules.transformText?.(node) ?? node.text;
+    }
+
+    getTextClass(node: TextInlineNode): RendererClass | undefined {
+        return this.context.rules.textClass?.(node);
+    }
+
+    getBlockClass(node: Node): RendererClass | undefined {
+        return this.context.rules.blockClass?.(node);
     }
 
     addMissingBlockType(type: string): void {

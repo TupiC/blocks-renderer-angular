@@ -1,7 +1,11 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import type { Modifier } from '../types';
-import { ComponentsContextService, ModifierComponent } from '../components-context.service';
+import type { Modifier, TextInlineNode } from '../types';
+import {
+    ComponentsContextService,
+    ModifierComponent,
+    RendererClass,
+} from '../components-context.service';
 import { DynamicComponentDirective } from '../dynamic-component.directive';
 
 @Component({
@@ -20,6 +24,16 @@ export class Text {
 
     private readonly componentsContext = inject(ComponentsContextService);
 
+    readonly node = computed<TextInlineNode>(() => ({
+        type: 'text',
+        text: this.text(),
+        bold: this.bold(),
+        italic: this.italic(),
+        underline: this.underline(),
+        strikethrough: this.strikethrough(),
+        code: this.code(),
+    }));
+
     readonly modifiers = computed<Modifier[]>(() => {
         const mods: Modifier[] = [];
         if (this.bold()) mods.push('bold');
@@ -31,7 +45,11 @@ export class Text {
     });
 
     get textParts(): string[] {
-        return this.text().split(/\r?\n|\r/g);
+        return this.componentsContext.transformText(this.node()).split(/\r?\n|\r/g);
+    }
+
+    get textClass(): RendererClass | undefined {
+        return this.componentsContext.getTextClass(this.node());
     }
 
     getModifierComponent(modifier: Modifier): ModifierComponent | undefined {

@@ -29,52 +29,54 @@
     @let c = content();
     @switch (c.type) {
         @case ('image') {
-            <img [src]="c.image.url" [alt]="c.image.alternativeText || ''" />
+            <img [src]="c.image.url" [alt]="c.image.alternativeText || ''" [ngClass]="blockClass" />
         }
     }
 } @else {
     @let c = content();
     @switch (c.type) {
         @case ('paragraph') {
-            <p><ng-container [ngTemplateOutlet]="renderChildren" /></p>
+            <p [ngClass]="blockClass"><ng-container [ngTemplateOutlet]="renderChildren" /></p>
         }
         @case ('quote') {
-            <blockquote><ng-container [ngTemplateOutlet]="renderChildren" /></blockquote>
+            <blockquote [ngClass]="blockClass">
+                <ng-container [ngTemplateOutlet]="renderChildren" />
+            </blockquote>
         }
         @case ('code') {
-            <pre><code>{{ plainText }}</code></pre>
+            <pre [ngClass]="blockClass"><code>{{ plainText }}</code></pre>
         }
         @case ('heading') {
             @switch (c.level) {
                 @case (1) {
-                    <h1>{{ plainText }}</h1>
+                    <h1 [ngClass]="blockClass">{{ plainText }}</h1>
                 }
                 @case (2) {
-                    <h2>{{ plainText }}</h2>
+                    <h2 [ngClass]="blockClass">{{ plainText }}</h2>
                 }
                 @case (3) {
-                    <h3>{{ plainText }}</h3>
+                    <h3 [ngClass]="blockClass">{{ plainText }}</h3>
                 }
                 @case (4) {
-                    <h4>{{ plainText }}</h4>
+                    <h4 [ngClass]="blockClass">{{ plainText }}</h4>
                 }
                 @case (5) {
-                    <h5>{{ plainText }}</h5>
+                    <h5 [ngClass]="blockClass">{{ plainText }}</h5>
                 }
                 @case (6) {
-                    <h6>{{ plainText }}</h6>
+                    <h6 [ngClass]="blockClass">{{ plainText }}</h6>
                 }
             }
         }
         @case ('list') {
             @if (c.format === 'ordered') {
-                <ol>
+                <ol [ngClass]="blockClass">
                     @for (childNode of c.children; track $index) {
                         <lib-block [content]="childNode" />
                     }
                 </ol>
             } @else {
-                <ul>
+                <ul [ngClass]="blockClass">
                     @for (childNode of c.children; track $index) {
                         <lib-block [content]="childNode" />
                     }
@@ -82,10 +84,12 @@
             }
         }
         @case ('list-item') {
-            <li><ng-container [ngTemplateOutlet]="renderChildren" /></li>
+            <li [ngClass]="blockClass"><ng-container [ngTemplateOutlet]="renderChildren" /></li>
         }
         @case ('link') {
-            <a [href]="c.url"><ng-container [ngTemplateOutlet]="renderChildren" /></a>
+            <a [href]="c.url" [ngClass]="blockClass">
+                <ng-container [ngTemplateOutlet]="renderChildren" />
+            </a>
         }
     }
 }

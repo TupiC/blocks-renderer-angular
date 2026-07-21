@@ -73,7 +73,7 @@
     @if ($index > 0) {
         <br />
     }
-    <span
+    <span [ngClass]="textClass"
         ><ng-container
             [ngTemplateOutlet]="renderModifiers"
             [ngTemplateOutletContext]="{ $implicit: part, modifierIndex: 0 }"

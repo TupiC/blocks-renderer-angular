@@ -13,7 +13,7 @@ pnpm add blocks-renderer-angular
 ```typescript
 import { Component, input } from '@angular/core';
 import { BlocksRenderer } from 'blocks-renderer-angular';
-import type { BlocksContent } from 'blocks-renderer-angular';
+import type { BlocksContent, RendererRules } from 'blocks-renderer-angular';
 
 @Component({
     selector: 'app-paragraph',
@@ -43,6 +43,7 @@ export class MyBoldComponent {}
             [content]="blocksContent"
             [blocks]="customBlocks"
             [modifiers]="customModifiers"
+            [rules]="rules"
         >
         </lib-blocks-renderer>
     `,
@@ -60,6 +61,15 @@ export class ContentComponent {
     customModifiers = {
         bold: MyBoldComponent,
     };
+
+    rules: RendererRules = {
+        transformText: (node) => node.text.replace(/^<note>/, ''),
+        textClass: (node) => (node.text.startsWith('<note>') ? 'note' : []),
+        blockClass: (node) => {
+            const first = 'children' in node ? node.children[0] : undefined;
+            return first?.type === 'text' && first.text.startsWith('<note>') ? 'note-block' : [];
+        },
+    };
 }
 ```
 
@@ -71,6 +81,18 @@ children.
 
 Custom modifier components wrap their remaining text and modifiers through `<ng-content />`.
 Any modifier without a registered component continues to use its default HTML element.
+
+Renderer rules customize text and CSS classes without replacing the default components:
+
+- `transformText` changes the displayed value of a text node. It is also applied to the plain
+  text used by default and custom heading and code components.
+- `textClass` adds classes to the rendered text `<span>`.
+- `blockClass` adds classes to default block elements such as `<p>`, headings, lists, list
+  items, links, and images. Custom block components remain responsible for their own classes.
+
+Rules receive the original, unmodified node, so the same marker can be used both to choose a
+class and to remove the marker from the displayed text. Text continues to be escaped; rules do
+not render transformed values as HTML.
 
 ## Releasing
 

@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 
 import { BlocksRenderer } from './blocks-renderer';
 import type { RootNode, BlocksContent } from '../types';
+import type { RendererRules } from '../components-context.service';
 
 @Component({
     selector: 'test-custom-block',
@@ -81,11 +82,13 @@ describe('BlocksRenderer', () => {
         content: BlocksContent;
         blocks?: Partial<Record<string, unknown>>;
         modifiers?: Partial<Record<string, unknown>>;
+        rules?: RendererRules;
     }) {
         fixture = TestBed.createComponent(BlocksRenderer);
         fixture.componentRef.setInput('content', props.content);
         if (props.blocks != null) fixture.componentRef.setInput('blocks', props.blocks);
         if (props.modifiers != null) fixture.componentRef.setInput('modifiers', props.modifiers);
+        if (props.rules != null) fixture.componentRef.setInput('rules', props.rules);
         fixture.detectChanges();
         native = fixture.debugElement.nativeElement as HTMLElement;
     }
@@ -560,6 +563,95 @@ describe('BlocksRenderer', () => {
             const h1 = native.querySelector('h1');
             expect(h1).toBeTruthy();
             expect(h1?.textContent?.trim()).toBe('A cool website');
+        });
+    });
+
+    describe('Rules', () => {
+        const rules: RendererRules = {
+            transformText: (node) => node.text.replace(/^<(?:g|c)>/, ''),
+            textClass: (node) => (node.text.startsWith('<g>') ? 'font-garamond' : []),
+            blockClass: (node) => {
+                const first = 'children' in node ? node.children[0] : undefined;
+                return first?.type === 'text' && first.text.startsWith('<c>') ? 'text-center' : [];
+            },
+        };
+
+        it('transforms text and applies classes to text and default block elements', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [
+                            { type: 'text', text: '<c>Centered' },
+                            { type: 'text', text: '<g> Garamond' },
+                        ],
+                    },
+                ],
+                rules,
+            });
+
+            const paragraph = native.querySelector('p');
+            const spans = native.querySelectorAll('p span');
+
+            expect(paragraph?.classList.contains('text-center')).toBe(true);
+            expect(spans[1].classList.contains('font-garamond')).toBe(true);
+            expect(paragraph?.textContent).toBe('Centered Garamond');
+            expect(native.textContent).not.toContain('<c>');
+            expect(native.textContent).not.toContain('<g>');
+        });
+
+        it('transforms plain text used by headings and code blocks', () => {
+            render({
+                content: [
+                    {
+                        type: 'heading',
+                        level: 2,
+                        children: [{ type: 'text', text: '<c>Heading' }],
+                    },
+                    {
+                        type: 'code',
+                        children: [{ type: 'text', text: '<g>code' }],
+                    },
+                ],
+                rules,
+            });
+
+            expect(native.querySelector('h2')?.textContent).toBe('Heading');
+            expect(native.querySelector('pre code')?.textContent).toBe('code');
+        });
+
+        it('reacts when rules change', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: '<g>Reactive' }],
+                    },
+                ],
+            });
+
+            expect(native.querySelector('p')?.textContent).toBe('<g>Reactive');
+
+            fixture.componentRef.setInput('rules', rules);
+            fixture.detectChanges();
+
+            expect(native.querySelector('p')?.textContent).toBe('Reactive');
+            expect(native.querySelector('span')?.classList.contains('font-garamond')).toBe(true);
+        });
+
+        it('keeps HTML-looking text escaped after transformation', () => {
+            render({
+                content: [
+                    {
+                        type: 'paragraph',
+                        children: [{ type: 'text', text: '<g><em>literal</em>' }],
+                    },
+                ],
+                rules,
+            });
+
+            expect(native.querySelector('em')).toBeFalsy();
+            expect(native.querySelector('p')?.textContent).toBe('<em>literal</em>');
         });
     });
 });
