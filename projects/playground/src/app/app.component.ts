@@ -1,6 +1,107 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { BlocksRenderer } from 'blocks-renderer-angular';
-import type { BlocksContent } from 'blocks-renderer-angular';
+import type { BlocksComponents, BlocksContent, ModifiersComponents } from 'blocks-renderer-angular';
+
+@Component({
+    selector: 'app-custom-paragraph',
+    standalone: true,
+    template: `
+        <div class="custom-paragraph">
+            <span class="custom-label">Custom paragraph block</span>
+            <p><ng-content /></p>
+        </div>
+    `,
+    styles: `
+        .custom-paragraph {
+            margin: 1rem 0;
+            padding: 1rem;
+            border: 2px dashed #7c3aed;
+            border-radius: 0.75rem;
+            background: #f5f3ff;
+        }
+
+        .custom-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #6d28d9;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin: 0;
+        }
+    `,
+})
+export class CustomParagraphComponent {}
+
+@Component({
+    selector: 'app-custom-heading',
+    standalone: true,
+    template: `
+        <div class="custom-heading">
+            <span>Custom heading block · source level {{ level() }}</span>
+            <h2>{{ plainText() }}</h2>
+        </div>
+    `,
+    styles: `
+        .custom-heading {
+            margin-top: 2rem;
+            border-bottom: 3px solid #0f766e;
+        }
+
+        span {
+            color: #0f766e;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            margin: 0.25rem 0 0.5rem;
+            color: #134e4a;
+        }
+    `,
+})
+export class CustomHeadingComponent {
+    level = input.required<number>();
+    plainText = input.required<string>();
+}
+
+@Component({
+    selector: 'app-custom-bold',
+    standalone: true,
+    template: `<strong class="custom-bold"><ng-content /></strong>`,
+    styles: `
+        .custom-bold {
+            padding: 0.05rem 0.25rem;
+            border-radius: 0.25rem;
+            color: #9f1239;
+            background: #ffe4e6;
+            box-shadow: inset 0 -2px #fda4af;
+        }
+    `,
+})
+export class CustomBoldComponent {}
+
+@Component({
+    selector: 'app-custom-code',
+    standalone: true,
+    template: `<code class="custom-code"><ng-content /></code>`,
+    styles: `
+        .custom-code {
+            padding: 0.15rem 0.4rem;
+            border: 1px solid #fdba74;
+            border-radius: 0.25rem;
+            color: #9a3412;
+            background: #fff7ed;
+        }
+    `,
+})
+export class CustomCodeComponent {}
 
 @Component({
     selector: 'app-root',
@@ -10,6 +111,16 @@ import type { BlocksContent } from 'blocks-renderer-angular';
     styleUrl: './app.component.css',
 })
 export class AppComponent {
+    customBlocks: Partial<BlocksComponents> = {
+        paragraph: CustomParagraphComponent,
+        heading: CustomHeadingComponent,
+    };
+
+    customModifiers: Partial<ModifiersComponents> = {
+        bold: CustomBoldComponent,
+        code: CustomCodeComponent,
+    };
+
     sampleContent: BlocksContent = [
         {
             type: 'heading',

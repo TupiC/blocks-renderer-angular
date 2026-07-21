@@ -1,10 +1,20 @@
 <div class="container">
     <header>
         <h1>Blocks Renderer Angular - Playground</h1>
-        <p>Test and preview the blocks renderer library</p>
+        <p>Test the default renderer alongside custom block and modifier components.</p>
     </header>
 
     <main>
-        <lib-blocks-renderer [content]="sampleContent" />
+        <aside class="legend" aria-label="Custom renderer legend">
+            <strong>Custom renderers enabled</strong>
+            <span>Blocks: paragraph, heading</span>
+            <span>Modifiers: bold, code</span>
+        </aside>
+
+        <lib-blocks-renderer
+            [content]="sampleContent"
+            [blocks]="customBlocks"
+            [modifiers]="customModifiers"
+        />
     </main>
 </div>
